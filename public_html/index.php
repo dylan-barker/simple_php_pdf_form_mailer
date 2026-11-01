@@ -10,7 +10,6 @@ send_security_headers();
 
 $csrfToken = csrf_token();
 $today = (new DateTimeImmutable('today'))->format('Y-m-d');
-$appName = (string) ($config['app_name'] ?? 'Personal Details');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,24 +18,14 @@ $appName = (string) ($config['app_name'] ?? 'Personal Details');
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?= e($csrfToken) ?>">
     <meta name="robots" content="noindex, nofollow">
-    <title><?= e($appName) ?> &middot; Secure form</title>
+    <title>Your personal details</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <script src="assets/js/app.js" defer></script>
 </head>
 <body>
 <div class="page">
-    <header class="site-header">
-        <span class="wordmark"><?= e($appName) ?></span>
-        <span class="badge"><span class="badge-dot" aria-hidden="true"></span>Confidential</span>
-    </header>
-
     <main class="card">
-        <p class="eyebrow">Secure submission</p>
         <h1>Your personal details</h1>
-        <p class="intro">
-            Enter your details below. A PDF is generated and emailed directly to our
-            records team. Nothing is saved on this server.
-        </p>
 
         <noscript>
             <p class="status status-error">
@@ -124,16 +113,7 @@ $appName = (string) ($config['app_name'] ?? 'Personal Details');
                 Submit another response
             </button>
         </section>
-
-        <p class="privacy-note">
-            Your details are used only to build the PDF attachment. They are not
-            written to disk, logged, or kept after the email is sent.
-        </p>
     </main>
-
-    <footer class="site-footer">
-        <span>Generated in memory &middot; never stored</span>
-    </footer>
 </div>
 </body>
 </html>

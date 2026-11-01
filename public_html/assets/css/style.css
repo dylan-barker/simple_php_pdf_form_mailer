@@ -59,47 +59,6 @@ body {
     gap: 18px;
 }
 
-/* ---- Header -------------------------------------------------------------- */
-
-.site-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 0 6px;
-}
-
-.wordmark {
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 5px 12px;
-    border: 1px solid rgba(180, 35, 24, 0.18);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.7);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: #8a2b20;
-}
-
-.badge-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #d92d20;
-    box-shadow: 0 0 0 3px rgba(217, 45, 32, 0.12);
-}
-
 /* ---- Card ---------------------------------------------------------------- */
 
 .card {
@@ -152,13 +111,6 @@ h2 {
     font-size: 1.5rem;
     font-weight: 600;
     color: var(--ink);
-}
-
-.intro {
-    margin: 0 0 28px;
-    max-width: 46ch;
-    color: var(--muted);
-    font-size: 0.95rem;
 }
 
 /* ---- Form ---------------------------------------------------------------- */
@@ -433,16 +385,6 @@ input:focus {
     color: var(--muted);
 }
 
-.site-footer {
-    display: flex;
-    justify-content: center;
-    padding: 4px 0 0;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #8593a8;
-}
-
 /* ---- Responsive and motion ---------------------------------------------- */
 
 @media (max-width: 560px) {
@@ -453,10 +395,6 @@ input:focus {
 
     .card {
         padding: 28px 22px 26px;
-    }
-
-    .site-header {
-        padding: 0 2px;
     }
 }
 
