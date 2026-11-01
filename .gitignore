@@ -1,0 +1,8 @@
+# Credentials, application code and dependencies live outside the web root.
+/private/config.php
+/private/vendor/
+/private/tmp/*
+!/private/tmp/.gitkeep
+*.log
+.DS_Store
+Thumbs.db

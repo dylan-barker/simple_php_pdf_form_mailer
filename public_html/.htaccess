@@ -1,0 +1,42 @@
+# ---------------------------------------------------------------------------
+# Simple PHP PDF Form Mailer - public web root
+#
+# Only index.php, submit.php and assets/ live here. Configuration, application
+# code, templates and dependencies are in the sibling ../private directory,
+# which is outside the web root and cannot be requested over HTTP.
+# ---------------------------------------------------------------------------
+
+# Directory listing is prevented by the index file. "Options -Indexes" is
+# deliberately omitted: some shared hosts forbid it in .htaccess and return a
+# 500 for the whole site.
+DirectoryIndex index.php
+AddDefaultCharset UTF-8
+
+# Never serve dotfiles such as .git, .env or .htaccess itself.
+<FilesMatch "^\.">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# The PDF is generated in memory and never served from disk, so deny any
+# stray PDF or log that should not exist in the first place.
+<FilesMatch "\.(pdf|log)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "same-origin"
+    Header always set X-Frame-Options "DENY"
+</IfModule>
