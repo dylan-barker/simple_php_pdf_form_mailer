@@ -1,8 +1,9 @@
-# Credentials, application code and dependencies live outside the web root.
-/private/config.php
-/private/vendor/
-/private/tmp/*
-!/private/tmp/.gitkeep
+# Credentials, application code and dependencies live in public_html/private,
+# which is protected from HTTP access by its own .htaccess.
+/public_html/private/config.php
+/public_html/private/vendor/
+/public_html/private/tmp/*
+!/public_html/private/tmp/.gitkeep
 *.log
 .DS_Store
 Thumbs.db

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 define('APP_RUNNING', true);
 
-require dirname(__DIR__) . '/private/lib/bootstrap.php';
+require __DIR__ . '/private/lib/bootstrap.php';
 require APP_PRIVATE . '/lib/validate.php';
 require APP_PRIVATE . '/lib/pdf.php';
 require APP_PRIVATE . '/lib/mailer.php';

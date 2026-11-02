@@ -1,8 +1,9 @@
 <?php
 /**
  * Copy this file to config.php in this same folder and fill in your values.
- * The private/ directory is a sibling of public_html, so it is never served
- * over HTTP. Never commit config.php - it contains your SMTP password.
+ * The private/ directory lives inside public_html but is blocked from HTTP
+ * access by its own .htaccess. Never commit config.php - it contains your SMTP
+ * password.
  */
 return [
     // ---- SMTP -------------------------------------------------------------
@@ -35,6 +36,6 @@ return [
     'app_debug'   => false,
 
     // Optional override for the scratch directory used by dompdf.
-    // Defaults to private/tmp, which is already outside the web root.
+    // Defaults to private/tmp, which is blocked from HTTP access.
     'storage_dir' => null,
 ];

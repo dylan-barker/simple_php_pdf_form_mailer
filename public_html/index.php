@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 define('APP_RUNNING', true);
 
-require dirname(__DIR__) . '/private/lib/bootstrap.php';
+require __DIR__ . '/private/lib/bootstrap.php';
 
 send_security_headers();
 

@@ -1,9 +1,9 @@
 # ---------------------------------------------------------------------------
 # Simple PHP PDF Form Mailer - public web root
 #
-# Only index.php, submit.php and assets/ live here. Configuration, application
-# code, templates and dependencies are in the sibling ../private directory,
-# which is outside the web root and cannot be requested over HTTP.
+# Only index.php, submit.php and assets/ are served. Configuration, application
+# code, templates and dependencies live in private/, which is inside the web
+# root and blocked by private/.htaccess. Keep that folder when deploying.
 # ---------------------------------------------------------------------------
 
 # Directory listing is prevented by the index file. "Options -Indexes" is

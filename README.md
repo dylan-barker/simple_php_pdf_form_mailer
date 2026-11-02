@@ -14,8 +14,8 @@ The PDF is never written to disk, and no personal data is stored on the server.
 - SMTP over TLS (port 587) or SSL (port 465); plaintext port 25 is rejected.
 - Optional password protection for the PDF attachment.
 - Works without JavaScript via a plain HTML response page.
-- Shared-host friendly layout: `public_html/` is the only web root, `private/`
-  holds configuration, code and dependencies.
+- Shared-host friendly layout: everything lives in `public_html/`, so the folder
+  can be uploaded as-is; `private/` is blocked by its own `.htaccess`.
 
 ## Requirements
 
@@ -28,18 +28,20 @@ The PDF is never written to disk, and no personal data is stored on the server.
 ```
 .
 ├── composer.json
-├── public_html/            web root
-│   ├── index.php           form page
-│   ├── submit.php          AJAX / HTML endpoint
-│   └── assets/
-│       ├── css/style.css
-│       └── js/app.js
-└── private/                outside the web root
-    ├── config.example.php
-    ├── lib/                bootstrap, validation, PDF, mailer
-    ├── templates/          PDF layout and no-JS response
-    ├── tmp/                dompdf scratch and error log
-    └── vendor/             Composer packages
+└── public_html/            web root - upload this folder's contents
+    ├── index.php           form page
+    ├── submit.php          AJAX / HTML endpoint
+    ├── .htaccess
+    ├── assets/
+    │   ├── css/style.css
+    │   └── js/app.js
+    └── private/            blocked from HTTP by private/.htaccess
+        ├── .htaccess
+        ├── config.example.php
+        ├── lib/            bootstrap, validation, PDF, mailer
+        ├── templates/      PDF layout and no-JS response
+        ├── tmp/            dompdf scratch and error log
+        └── vendor/         Composer packages
 ```
 
 ## Getting started
@@ -50,20 +52,21 @@ cd simple-php-pdf-form-mailer
 
 composer install
 
-cp private/config.example.php private/config.php
-# edit private/config.php with your SMTP details
+cp public_html/private/config.example.php public_html/private/config.php
+# edit public_html/private/config.php with your SMTP details
 
 php -S localhost:8000 -t public_html
 ```
 
 Open <http://localhost:8000>.
 
-Composer is configured to install packages into `private/vendor`, so
-dependencies stay outside the web root.
+Composer installs packages into `public_html/private/vendor`, so dependencies
+travel with the rest of the `private/` folder.
 
 ## Configuration
 
-`private/config.php` is gitignored. Start from `private/config.example.php`.
+`public_html/private/config.php` is gitignored. Start from
+`public_html/private/config.example.php`.
 
 | Key | Description |
 | --- | --- |
@@ -75,7 +78,7 @@ dependencies stay outside the web root.
 | `timezone` | Timezone for the "generated on" timestamp. |
 | `pdf_password` | Optional password for the PDF attachment. Empty disables it. |
 | `app_debug` | Log the SMTP conversation. Keep `false` in production. |
-| `storage_dir` | Optional scratch path. Defaults to `private/tmp`. |
+| `storage_dir` | Optional scratch path. Defaults to `public_html/private/tmp`. |
 
 ## How it works
 
@@ -88,12 +91,13 @@ index.php → submit.php
 ```
 
 The PDF exists only as a PHP string for the duration of the request. dompdf is
-given a per-request scratch directory under `private/tmp`, which is deleted
-before the response is sent.
+given a per-request scratch directory under `public_html/private/tmp`, which is
+deleted before the response is sent.
 
 ## Security
 
-- Sensitive files live outside the web root in `private/`.
+- Sensitive files live in `public_html/private/`, which `.htaccess` denies to
+  HTTP clients (defence in depth for setups where that folder is reachable).
 - The PDF is never written to disk, and responses are marked `no-store` so
   form data is not cached by the browser.
 - Email subject, body and attachment name contain no personal data.
@@ -106,21 +110,22 @@ receiving mailboxes. Use TLS, strong passwords and 2FA on both.
 
 ## Deployment
 
-Upload the two folders so they remain siblings on the host:
+Upload the contents of `public_html/` into the host's web root. The `private/`
+folder travels inside it:
 
 ```
-/home/you/private/       ← the whole private/ folder
-/home/you/public_html/   ← the contents of public_html/
+/home/you/public_html/            ← contents of public_html/
+/home/you/public_html/private/    ← the whole private/ folder
 ```
 
 1. Run `composer install --no-dev --optimize-autoloader` locally and upload
-   `private/vendor/` with the rest.
-2. Make `private/tmp/` writable and keep `private/config.php` readable only by
-   the PHP user (`0644`).
-3. Serve the site over HTTPS.
-
-The entry points load `../private/lib/bootstrap.php`, so do not move one folder
-without the other.
+   `public_html/private/vendor/` with the rest.
+2. Make `public_html/private/tmp/` writable and keep
+   `public_html/private/config.php` readable only by the PHP user (`0644`).
+3. Keep `public_html/private/.htaccess` in place: it blocks HTTP access to the
+   folder (Apache). On Nginx or LiteSpeed without `.htaccess` support, add an
+   equivalent deny rule for `/private/` in the server config.
+4. Serve the site over HTTPS.
 
 ## Testing
 
@@ -130,4 +135,4 @@ without the other.
 - Confirm the honeypot and CSRF token are enforced.
 - Disable JavaScript and confirm the plain HTML response page still works.
 - After a submission, verify no PDF exists anywhere under the project or
-  `private/tmp`.
+  `public_html/private/tmp`.

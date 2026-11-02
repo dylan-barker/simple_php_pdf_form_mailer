@@ -13,9 +13,9 @@ if (!defined('APP_RUNNING')) {
     exit;
 }
 
-define('APP_ROOT', dirname(__DIR__, 2));
-define('APP_PRIVATE', APP_ROOT . '/private');
-define('APP_PUBLIC', APP_ROOT . '/public_html');
+define('APP_PRIVATE', dirname(__DIR__));
+define('APP_PUBLIC', dirname(APP_PRIVATE));
+define('APP_ROOT', APP_PUBLIC);
 
 if (PHP_VERSION_ID < 80100) {
     http_response_code(500);
@@ -32,8 +32,9 @@ require $autoload;
 // ---------------------------------------------------------------------------
 // Configuration lookup
 //
-// The real config lives in private/, which is a sibling of public_html and is
-// therefore outside the web root. APP_CONFIG can point at another file.
+// The real config lives in private/, which sits inside the web root and is
+// protected by its own .htaccess. APP_CONFIG can point at another file, for
+// example one kept outside the web root on hosts that allow it.
 // ---------------------------------------------------------------------------
 $configCandidates = [];
 
